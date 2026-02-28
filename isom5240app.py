@@ -22,4 +22,7 @@ age_predictions = sorted(age_predictions, key=lambda x: x['score'], reverse=True
 print("Predicted Age Range:")
 print(f"Age range: {age_predictions[0]['label']}")
 
+image = Image.open(image_name)
+st.image(image, caption="Uploaded Image", use_column_width=True)
+st.write(f"Age range: {age_predictions[0]['label']}")
 st.write("done")
