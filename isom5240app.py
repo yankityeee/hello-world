@@ -17,7 +17,7 @@ def imgClassifier(image_name, modelName):
 
     return age_predictions
 
-def output_msg():
+def output_msg(age_predictions):
     # Display results
     st.write(age_predictions)
     age_predictions = sorted(age_predictions, key=lambda x: x['score'], reverse=True)
@@ -32,7 +32,7 @@ def main():
     # age_predictions = imgClassifier("middleagedMan.jpg", "prithivMLmods/Age-Classification-SigLIP2")
     age_predictions = imgClassifier("middleagedMan.jpg", "dima806/fairface_age_image_detection")
 
-    output_msg()
+    output_msg(age_predictions)
 
 # main part
 if __name__ == "__main__":
