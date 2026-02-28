@@ -29,9 +29,10 @@ def main():
     # Streamlit UI
     st.title("Age Classification using ViT")
     
-    # age_predictions = imgClassifier("middleagedMan.jpg", "prithivMLmods/Age-Classification-SigLIP2")
+    age_predictions = imgClassifier("middleagedMan.jpg", "prithivMLmods/Age-Classification-SigLIP2")
+    output_msg(age_predictions)
+    
     age_predictions = imgClassifier("middleagedMan.jpg", "dima806/fairface_age_image_detection")
-
     output_msg(age_predictions)
 
 # main part
