@@ -27,5 +27,5 @@ def main():
     st.write(f"Age range: {age_predictions[0]['label']}")
     st.write("done")
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     main()
