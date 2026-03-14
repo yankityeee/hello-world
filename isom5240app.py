@@ -4,6 +4,8 @@ import torch
 import numpy as np
 import streamlit as st
 
+st.title("Testing App")
+
 # Testing with the saved model
 model2 = AutoModelForSequenceClassification.from_pretrained("isom5240/2026Spring5240L1",
                                                             num_labels=5)
