@@ -1,40 +1,28 @@
-from transformers import pipeline
+from transformers import AutoModelForSequenceClassification
+from transformers import AutoTokenizer
+import torch
+import numpy as np
 import streamlit as st
-from PIL import Image
 
-# function part
-def imgClassifier(image_name, modelName):
-    # Load the age classification pipeline
-    # The code below should be placed in the main part of the program
-    age_classifier = pipeline("image-classification",
-                              model=modelName)
-    
-    image_name = Image.open(image_name).convert("RGB")
-    st.image(image_name, caption="Uploaded Image", use_column_width=True)
-    
-    # Classify age
-    age_predictions = age_classifier(image_name)
+# Testing with the saved model
+model2 = AutoModelForSequenceClassification.from_pretrained("isom5240/2026Spring5240L1",
+                                                            num_labels=5)
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
-    return age_predictions
+# Tokenized testing data
+label = 4 # label = 4
+text = "dr. goldberg offers everything i look for in a general practitioner. he's nice and easy to talk to without being patronizing; he's always on time in seeing his patients; he's affiliated with a top-notch hospital (nyu) which my parents have explained to me is very important in case something happens and you need surgery; and you can get referrals to see specialists without having to see him first. really, what more do you need? i'm sitting here trying to think of any complaints i have about him, but i'm really drawing a blank."
+inputs = tokenizer(text,
+                   padding=True,
+                   truncation=True,
+                   return_tensors='pt')
 
-def output_msg(age_predictions):
-    # Display results
-    st.write(age_predictions)
-    age_predictions = sorted(age_predictions, key=lambda x: x['score'], reverse=True)
+outputs = model2(**inputs)
+predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
+predictions = predictions.cpu().detach().numpy()
 
-    st.write(f"Age range: {age_predictions[0]['label']}")
-    st.write("done")
+# Get the index of the largest output value
+max_index = np.argmax(predictions)
 
-def main():
-    # Streamlit UI
-    st.title("Age Classification using ViT")
-    
-    age_predictions = imgClassifier("middleagedMan.jpg", "prithivMLmods/Age-Classification-SigLIP2")
-    output_msg(age_predictions)
-    
-    age_predictions = imgClassifier("middleagedMan.jpg", "dima806/fairface_age_image_detection")
-    output_msg(age_predictions)
-
-# main part
-if __name__ == "__main__":
-    main()
+st.write(text)
+st.write(f"The label is {label} and the predicted label is {max_index}")
